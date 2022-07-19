@@ -2,7 +2,7 @@ CC := gcc
 AS := as
 LD := ld
 
-OBJECTS_COMMON := main.o lab2_helper.o
+OBJECTS_COMMON := main.o lab2_helper.o lab2km.o
 
 OBJECTS_PART1 := $(OBJECTS_COMMON) attacker-part1.o
 TARGET_PART1  := part1
@@ -35,6 +35,11 @@ build/%.o: src-common/%.s
 	@$(AS) -c $(ASFLAGS) $< -o $@
 
 build/%.o: src-common/%.c
+	@echo " CC    $<"
+	@mkdir -p build
+	@$(CC) -c $(CFLAGS) $< -o $@
+
+build/%.o: module-src/%.c
 	@echo " CC    $<"
 	@mkdir -p build
 	@$(CC) -c $(CFLAGS) $< -o $@
