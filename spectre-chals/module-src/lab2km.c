@@ -30,9 +30,9 @@ static volatile size_t __attribute__((aligned(32768))) secret_leak_limit_part2 =
 static volatile size_t __attribute__((aligned(32768))) secret_leak_limit_part3 = 4;
 
 static struct proc_dir_entry *lab2_procfs_victim = NULL;
-static const struct file_operations  lab2_victim_ops = {
-    .write = lab2_victim_write,
-    .read = lab2_victim_read,
+static const struct proc_ops  lab2_victim_ops = {
+    .proc_write = lab2_victim_write,
+    .proc_read = lab2_victim_read,
 };
 
 /*
@@ -128,7 +128,7 @@ ssize_t lab2_victim_write(struct file *file_in, const char __user *userbuf, size
             // If the return value is negative, its an error, so don't try to unpin!
             if (retval > 0) {
                 // Unpin the pages that got pinned before exiting
-                put_user_pages(pages, retval);
+                unpin_user_pages(pages, retval);
             }
 
             return num_bytes;
@@ -194,7 +194,7 @@ ssize_t lab2_victim_write(struct file *file_in, const char __user *userbuf, size
         }
 
         // Unpin to ensure refcounts are valid
-        put_user_pages(pages, LAB2_SHARED_MEMORY_NUM_PAGES);
+        unpin_user_pages(pages, LAB2_SHARED_MEMORY_NUM_PAGES);
 
         // Success!
         return num_bytes;

