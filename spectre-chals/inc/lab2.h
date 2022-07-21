@@ -17,6 +17,12 @@
  ************************/
 
 /*
+ * mfence
+ * Adds a memory fence
+ */
+static inline void mfence();
+
+/*
  * clflush
  * Flushes an address from the cache for you
  *

