@@ -46,8 +46,6 @@ int run_attacker(int kernel_fd, char *shared_memory) {
 
     for (current_offset = 0; current_offset < LAB2_SECRET_MAX_LEN; current_offset++) {
         char leaked_byte;
-        char min_idx;
-        size_t min_val = 1000000;
 
         // [6.888 Part 1]- Fill this in!
         // Feel free to create helper methods as necessary.
@@ -55,8 +53,13 @@ int run_attacker(int kernel_fd, char *shared_memory) {
         // Find the value of leaked_byte for offset "current_offset"
         // leaked_byte = ??
 
+        // Begin User Code
+
+        char min_idx;
+        size_t min_val = 1000000;
+
         // printf("Train\n");
-        // for (size_t i = 0; i < 128; i++) {
+        // for (size_t i = 0; i < 100; i++) {
         //     call_kernel_part1(kernel_fd, shared_memory, 0);
         // }
 
@@ -91,6 +94,8 @@ int run_attacker(int kernel_fd, char *shared_memory) {
 
         leaked_byte = min_idx;
         printf("leaked_byte: %c\n", leaked_byte);
+
+        // End of User Code
 
         leaked_str[current_offset] = leaked_byte;
         if (leaked_byte == '\x00') {
