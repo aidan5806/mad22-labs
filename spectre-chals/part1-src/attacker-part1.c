@@ -58,11 +58,6 @@ int run_attacker(int kernel_fd, char *shared_memory) {
         char min_idx;
         size_t min_val = 1000000;
 
-        // printf("Train\n");
-        // for (size_t i = 0; i < 100; i++) {
-        //     call_kernel_part1(kernel_fd, shared_memory, 0);
-        // }
-
         // printf("Flush\n");
         for (size_t j = 0; j < LAB2_SHARED_MEMORY_NUM_PAGES; j++) {
             clflush((void *)(shared_memory + (j * LAB2_PAGE_SIZE)));
