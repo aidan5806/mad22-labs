@@ -49,10 +49,6 @@ int run_attacker(int kernel_fd, char *shared_memory) {
         // [6.888 Part 3]- Fill this in!
         // leaked_byte = ??
 
-        // Begin User Code
-
-        // End User Code
-
         leaked_str[current_offset] = leaked_byte;
         if (leaked_byte == '\x00') {
             break;
