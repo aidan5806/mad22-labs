@@ -1,6 +1,6 @@
 /*
  * MIT 6.888 Lab 5: Address Space Layout Randomization
- * Part 1B: Prefetch
+ * Part 1A: Egghunter
  *
  * Modified for MAD 2022 at ISCA.
  */

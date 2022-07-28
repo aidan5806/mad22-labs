@@ -114,6 +114,8 @@ int main() {
 	uint64_t seed = get_random_seed();
 	srand(seed);
 
+    printf("Starting aslr challenge...\n"); // Don't remove, will fail otherwise (don't ask IDK why)
+
 	uint64_t random_addr = (0x0000000FFFFFFFFF & rand()) << 12;
 	char *shared_memory = mmap((void *)random_addr, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED, -1, 0);
 
