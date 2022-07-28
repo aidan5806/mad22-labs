@@ -28,12 +28,7 @@
  */
 uint64_t find_address(uint64_t low_bound, uint64_t high_bound) {
     for (uint64_t addr = low_bound; addr < high_bound; addr += PAGE_SIZE) {
-        // printf("Trying address: %lx\n", addr);
-        access((void *)addr, 0);
-
-        if (errno != EFAULT) {
-            return addr;
-        }
+        // TODO: Figure out if "addr" is the correct address or not.
     }
 
     return 0;
